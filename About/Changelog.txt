@@ -1,0 +1,4 @@
+# Changelog for TooltipsInDevmode
+
+1.5.0 - First publish
+
