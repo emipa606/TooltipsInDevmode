@@ -1,30 +1,28 @@
-using System;
 using HarmonyLib;
 using LudeonTK;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse;
-using System.Collections.Generic;
 
 namespace TooltipsInDevmode;
 
 [HarmonyPatch(typeof(DevGUI), nameof(DevGUI.Label))]
 public static class DevGUI_Label
 {
-	//Cache. Dictionary to store: label <=> length
-	private static readonly Dictionary<string, float> LabelWidthCache = new();
+	//Cache. Dictionary to store: label <=> length + trimmedLabel
+	public static readonly Dictionary<string, (float width, string trimmed)> LabelCache = new();
 
-	//It will calculate the width only once for each label and then will use these values.
-	//Potential issues (not sure if it really is): if there will be dynamic generation of ThingDefs and
-	//the list will be updated every frame with new values, then this Dictionary will be getting bigger and bigger...
-	//But I doubt, that there is such a thing.
+	//It will calculate the width & trimmed label only once for each label and then will use these values.
 
 	public static void Postfix(Rect rect, string label)
 	{
-		float width;
-		if (!LabelWidthCache.TryGetValue(label, out width))
+		if (!LabelCache.TryGetValue(label, out var entry))
 		{
-			width = Text.CalcSize(label).x;
-			LabelWidthCache[label] = width;
+			float width = Text.CalcSize(label).x;
+			string trimmed = label.Trim();
+			entry = (width, trimmed);
+			LabelCache[label] = entry;
 		}
 
 		var newRect = rect;
@@ -34,9 +32,40 @@ public static class DevGUI_Label
 			newRect = UIScaling.AdjustRectToUIScaling(rect);
 		}
 
-		if (newRect.width < width)	//much much faster
+		if (newRect.width < entry.width)	//much much faster
 		{
-			TooltipHandler.TipRegion(newRect, label.Trim());
+			TooltipHandler.TipRegion(newRect, entry.trimmed);	//faster only if trimming really happens
+		}
+	}
+}
+
+//Clear the cache every time the debug window is closed.
+[HarmonyPatch(typeof(Window), "Close")]
+public static class DevTooltipCache_ClearOnClose
+{
+	public static void Postfix(Window __instance)
+	{
+		if (__instance is Dialog_Debug)
+		{
+			int countBefore = DevGUI_Label.LabelCache.Count;
+			DevGUI_Label.LabelCache.Clear();
+			Log.Message($"[TooltipsInDevmode] Cleared cache after closing dev menu. Removed {countBefore} entries.");
+		}
+	}
+}
+
+//In-game Debug. Show the current count of entries. Check for leaks if not in debug menu
+//Log Count by pressing <ctrl>+<F7>
+public class TooltipCacheDebugger : GameComponent
+{
+	public TooltipCacheDebugger(Game game) { }
+
+	public override void GameComponentUpdate()
+	{
+		if ((UnityEngine.Input.GetKey(KeyCode.LeftControl) || UnityEngine.Input.GetKey(KeyCode.RightControl))
+		&& UnityEngine.Input.GetKeyDown(KeyCode.F7))
+		{
+			Log.Message($"[TooltipsInDevmode] Cache currently holds {DevGUI_Label.LabelCache.Count} entries.");
 		}
 	}
 }
