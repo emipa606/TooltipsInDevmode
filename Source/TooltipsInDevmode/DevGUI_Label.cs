@@ -17,12 +17,24 @@ public static class DevGUI_Label
 
 	public static void Postfix(Rect rect, string label)
 	{
-		if (!LabelCache.TryGetValue(label, out var entry))
+		(float width, string trimmed) entry;
+
+		// Only cache if the top window is the debug menu
+		if ((Find.WindowStack?.WindowOfType<Dialog_Debug>() is Dialog_Debug))
 		{
-			float width = Text.CalcSize(label).x;
-			string trimmed = label.Trim();
-			entry = (width, trimmed);
-			LabelCache[label] = entry;
+			if (!LabelCache.TryGetValue(label, out entry))
+			{
+				float width = Text.CalcSize(label).x;
+				string trimmed = label.Trim();
+				entry = (width, trimmed);
+				LabelCache[label] = entry;
+			}
+		}
+		//ignore for other windows. Reason (example): every log entry in Rimworld is drawn with Label too, so Dictionary will be growing indefinitely
+		else
+		{
+			entry.width = Text.CalcSize(label).x;
+			entry.trimmed = label.Trim();
 		}
 
 		var newRect = rect;
@@ -32,9 +44,9 @@ public static class DevGUI_Label
 			newRect = UIScaling.AdjustRectToUIScaling(rect);
 		}
 
-		if (newRect.width < entry.width)	//much much faster
+		if (newRect.width < entry.width)    //cached width (if in debug)
 		{
-			TooltipHandler.TipRegion(newRect, entry.trimmed);	//faster only if trimming really happens
+			TooltipHandler.TipRegion(newRect, entry.trimmed);   //cached trim (if in debug)
 		}
 	}
 }
@@ -54,8 +66,8 @@ public static class DevTooltipCache_ClearOnClose
 	}
 }
 
-//In-game Debug. Show the current count of entries. Check for leaks if not in debug menu
-//Log Count by pressing <ctrl>+<F7>
+//In-game Debug. Show the current count of entries. Check for leaks if not in debug menu, etc.
+//Logs Count by pressing <ctrl>+<F7>
 public class TooltipCacheDebugger : GameComponent
 {
 	public TooltipCacheDebugger(Game game) { }
