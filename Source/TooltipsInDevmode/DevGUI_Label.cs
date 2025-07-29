@@ -18,9 +18,9 @@ public static class DevGUI_Label
             newRect = UIScaling.AdjustRectToUIScaling(rect);
         }
 
-        if (newRect.width < Text.CalcSize(label).x)
-        {
+        //if (newRect.width < Text.CalcSize(label).x)
+        //{
             TooltipHandler.TipRegion(newRect, label.Trim());
-        }
+        //}
     }
 }
