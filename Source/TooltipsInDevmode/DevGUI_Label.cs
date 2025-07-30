@@ -59,25 +59,25 @@ public static class DevTooltipCache_ClearOnClose
 	{
 		if (__instance is Dialog_Debug)
 		{
-			int countBefore = DevGUI_Label.LabelCache.Count;
+			//int countBefore = DevGUI_Label.LabelCache.Count;
 			DevGUI_Label.LabelCache.Clear();
-			Log.Message($"[TooltipsInDevmode] Cleared cache after closing dev menu. Removed {countBefore} entries.");
+			//Log.Message($"[TooltipsInDevmode] Cleared cache after closing dev menu. Removed {countBefore} entries.");
 		}
 	}
 }
 
 //In-game Debug. Show the current count of entries. Check for leaks if not in debug menu, etc.
 //Logs Count by pressing <ctrl>+<F7>
-public class TooltipCacheDebugger : GameComponent
-{
-	public TooltipCacheDebugger(Game game) { }
+//public class TooltipCacheDebugger : GameComponent
+//{
+//	public TooltipCacheDebugger(Game game) { }
 
-	public override void GameComponentUpdate()
-	{
-		if ((UnityEngine.Input.GetKey(KeyCode.LeftControl) || UnityEngine.Input.GetKey(KeyCode.RightControl))
-		&& UnityEngine.Input.GetKeyDown(KeyCode.F7))
-		{
-			Log.Message($"[TooltipsInDevmode] Cache currently holds {DevGUI_Label.LabelCache.Count} entries.");
-		}
-	}
-}
+//	public override void GameComponentUpdate()
+//	{
+//		if ((UnityEngine.Input.GetKey(KeyCode.LeftControl) || UnityEngine.Input.GetKey(KeyCode.RightControl))
+//		&& UnityEngine.Input.GetKeyDown(KeyCode.F7))
+//		{
+//			Log.Message($"[TooltipsInDevmode] Cache currently holds {DevGUI_Label.LabelCache.Count} entries.");
+//		}
+//	}
+//}
