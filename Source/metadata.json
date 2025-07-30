@@ -2,12 +2,18 @@
   "Continued": false,
   "CanAdd": "0",
   "CanRemove": "0",
-  "LastXmlCleaning": "2025-06-12T12:20:57.5162425+02:00",
+  "LastXmlCleaning": "2025-07-30T13:40:52.5985492+02:00",
   "SocialImageSet": true,
   "FundingSet": true,
   "SearchTags": [
     " dev-mode",
     " layout"
   ],
-  "PreviewVersion": "1.6"
+  "PreviewVersion": "1.6",
+  "Patches": false,
+  "Defs": false,
+  "Assemblies": true,
+  "LinesOfCode": 3393,
+  "LinesOfXML": 0,
+  "CodeBaseSize": 52
 }

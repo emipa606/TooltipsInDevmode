@@ -1,5 +1,8 @@
 # Changelog for TooltipsInDevmode
 
+1.6.1 - Caching for greater performance, thanks mitasamodel
+
+
 1.6.0 - Mod updated for 1.6 and passed autotests
 
 
