@@ -19,7 +19,7 @@ public static class DevGUI_Label
     {
         (float width, string trimmed) entry;
 
-        // Only cache if the top window is the debug menu
+        // Add tooltip only if the top window is the debug menu
         if (Find.WindowStack?.WindowOfType<Dialog_Debug>() is not null)
         {
             if (!LabelCache.TryGetValue(label, out entry))
@@ -29,24 +29,18 @@ public static class DevGUI_Label
                 entry = (width, trimmed);
                 LabelCache[label] = entry;
             }
-        }
-        //ignore for other windows. Reason (example): every log entry in Rimworld is drawn with Label too, so Dictionary will be growing indefinitely
-        else
-        {
-            entry.width = Text.CalcSize(label).x;
-            entry.trimmed = label.Trim();
-        }
 
-        var newRect = rect;
-        var uiScaleDivision = Prefs.UIScale / 2f;
-        if (Prefs.UIScale > 1f && Math.Abs(uiScaleDivision - Mathf.Floor(uiScaleDivision)) > float.Epsilon)
-        {
-            newRect = UIScaling.AdjustRectToUIScaling(rect);
-        }
+			var newRect = rect;
+			var uiScaleDivision = Prefs.UIScale / 2f;
+			if (Prefs.UIScale > 1f && Math.Abs(uiScaleDivision - Mathf.Floor(uiScaleDivision)) > float.Epsilon)
+			{
+				newRect = UIScaling.AdjustRectToUIScaling(rect);
+			}
 
-        if (newRect.width < entry.width) //cached width (if in debug)
-        {
-            TooltipHandler.TipRegion(newRect, entry.trimmed); //cached trim (if in debug)
-        }
-    }
+			if (newRect.width < entry.width) //cached width (if in debug)
+			{
+				TooltipHandler.TipRegion(newRect, entry.trimmed); //cached trim (if in debug)
+			}
+		}        
+	}
 }
