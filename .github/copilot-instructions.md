@@ -1,38 +1,38 @@
-# Copilot Instructions for RimWorld Modding Project
+# Tooltips in Dev-mode Mod
 
 ## Mod Overview and Purpose
 
-This mod is designed to enhance the developer experience in RimWorld by adding additional debugging tools and user interface enhancements. The primary goal is to provide developers with a more intuitive and efficient way to visualize and manipulate game data directly within the game's development environment.
+The "Tooltips in Dev-mode" mod for RimWorld is designed to enhance the utility and user experience of the development mode interface. In-game development tools often feature buttons with text that exceeds the fixed width of the button, making it difficult for modders to identify specific tools at a glance. This mod aims to alleviate this issue by adding tooltips to buttons in dev-mode windows, showing full label text whenever the displayed text is truncated. This small yet significant enhancement aids mod creators and testers in finding the right tools more efficiently and without the need for trial and error.
 
 ## Key Features and Systems
 
-- **Developer UI Enhancements**: The mod introduces new UI components such as pinnable checkboxes and labels to organize and control the display of developer information easily.
-- **Tooltips Assistance**: Improved tooltips in development mode to provide quick reference details without cluttering the main interface.
-- **Version Compatibility**: Supports multiple .NET Framework versions, ensuring broader compatibility across different development environments.
+- **Dynamic Tooltips**: The mod automatically generates tooltips for buttons in the dev-mode windows when the button text is truncated, showing the complete label text for easy identification.
 
 ## Coding Patterns and Conventions
 
-- **Static Classes**: Utilizes static classes, such as `DevGUI_CheckboxPinnable`, `DevGUI_Label`, and `TooltipsInDevmode`, to encapsulate specific functionality related to the developer UI enhancements.
-- **Consistent Naming**: Classes and methods follow PascalCase naming conventions to maintain clarity and consistency.
-- **Code Organization**: Organizes related utilities and functionalities into separate static classes for modularity and ease of maintenance.
+The mod is built with C# and follows these coding standards:
+
+- Static classes are used where appropriate for methods that don't rely on instance-specific data (`DevGUI_CheckboxPinnable`, `DevGUI_Label`, `DevTooltipCache_ClearOnClose`, `TooltipsInDevmode`).
+- Use of PascalCase for class and method names for consistency with C# conventions.
+- Clear code separation between static utility classes and main functionality classes.
 
 ## XML Integration
 
-- **XML Data**: Although not indicated in the provided summary, if XML files are used to define UI components or configure settings, ensure they are well-structured and adhere to RimWorld's modding standards.
-- **Patching and Overrides**: When integrating XML data, utilize PatchOperation instructions to modify and extend base game definitions safely.
+- The mod does not directly rely on XML for defining content or configurations but interacts with existing XML structures to determine when a tooltip is necessary.
 
 ## Harmony Patching
 
-- **Patch Application**: Use Harmony, a library for patching .NET assemblies, to override and extend RimWorld's base methods without modifying the original game files.
-- **Target Methods**: Identify and target specific game methods that require enhancement or additional behaviors, ensuring that patches are non-destructive and reversible.
-- **Version Control**: Always test Harmony patches against different game versions to avoid compatibility issues.
+- Harmony is used for patching methods within the RimWorld dev-mode functionality. This allows the mod to hook into the existing button generation code and determine when to add tooltips based on text width constraints.
+- Ensure Harmony patches are targeted and do not introduce conflicts with other dev-mode enhancements.
 
 ## Suggestions for Copilot
 
-1. **Code Generation Templates**: Use Copilot to assist in generating templates for new classes or methods, adhering to the project's existing coding patterns.
-2. **UI Component Suggestions**: Leverage Copilot to brainstorm new UI components or improvements on existing ones, with a focus on enhancing developer usability.
-3. **Refactoring Assistance**: Employ Copilot to refactor legacy code or simplify complex logic while maintaining functionality.
-4. **Harmony Integration Guidance**: Use Copilot to explore examples and suggestions for efficient Harmony patching, focusing on method injections and replacements.
-5. **Error Handling**: Implement comprehensive error checking and logging mechanisms with Copilot's assistance to ensure robustness and ease of debugging.
+When using GitHub Copilot for further development on this mod, consider the following suggestions:
 
-By following these instructions, contributors can work cohesively within the existing framework and utilize GitHub Copilot effectively to advance the mod's development.
+- **Automate Repetitive Code**: Use Copilot to suggest boilerplate code for new classes or methods that adhere to existing conventions, helping maintain consistency and reduce manual errors.
+- **Tooltip Logic**: Implement additional features to tooltips such as customizing the appearance or behavior through Copilot’s suggestions for UI enhancements.
+- **Performance Optimization**: Suggest optimizations for handling tooltips efficiently, especially when dealing with a large number of buttons.
+- **Extend Functionality**: Brainstorm and prototype additional dev-mode features with Copilot, like filtering or categorizing buttons, to improve modder workflow.
+- **Testing Patches**: Use Copilot to aid in writing testing routines that ensure Harmony patches do not introduce unexpected behaviors.
+
+By using these guidelines and suggestions, Copilot can effectively assist in the development and refinement of the "Tooltips in Dev-mode" mod to enhance its utility and performance. Happy modding!

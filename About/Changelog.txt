@@ -1,5 +1,8 @@
 # Changelog for TooltipsInDevmode
 
+1.6.2 - Only do work in the debug-actions window
+
+
 1.6.1 - Caching for greater performance, thanks mitasamodel
 
 
